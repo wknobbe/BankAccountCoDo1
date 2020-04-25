@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Account Page";
+}
+@model Transaction
+@{
+    decimal sum = 0;
+    foreach(var trans in ViewBag.Transactions)
+    {
+        sum += trans.Amount;
+    }
+}
+
+<h1>Welcome @ViewBag.UserFirstName @ViewBag.UserLastName</h1>
+<a href="/logout">Logout</a>
+<h2>Current Balance: $@Math.Round(sum,2)</h2>
+<form asp-action="Update" method="POST" class="col-5 mx-auto">
+    <div class="form-group">
+        <span asp-validation-for="Amount"></span><br>
+        <label asp-for="Amount">Deposit / Withdraw: </label>
+        <input type="decimal" asp-for="Amount" class="form-control">
+        <input type="hidden" asp-for="UserId" value="@ViewBag.UserId">
+    </div>
+    <div>
+        <input type="submit" value="Submit" class="btn btn-lg btn-primary">
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trans in ViewBag.Transactions)
+        {
+            <tr>
+                <td>$ @Math.Round(trans.Amount,2)</td>
+                <td>@trans.CreatedAt</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
